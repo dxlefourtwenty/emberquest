@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -23,10 +25,13 @@ class EmberPlayer extends SpriteAnimationComponent
   final double terminalVelocity = 150;
   int horizontalDirection = 0;
 
+  final bool isMobile = Platform.isAndroid || Platform.isIOS;
+
   bool hasJumped = false;
   bool isOnGround = false;
   bool hitByEnemy = false;
   // add bool here for isInvincible
+  // add bool here for hitByPowerUp
 
   @override
   Future<void> onLoad() async {
@@ -82,7 +87,11 @@ class EmberPlayer extends SpriteAnimationComponent
     // Determine if ember has jumped.
     if (hasJumped) {
       if (isOnGround) {
-        velocity.y = -jumpSpeed;
+        if (isMobile) {
+          velocity.y = (-jumpSpeed) / 2;
+        } else {
+          velocity.y = -jumpSpeed;
+        }
         isOnGround = false;
       }
       hasJumped = false;
@@ -169,4 +178,5 @@ class EmberPlayer extends SpriteAnimationComponent
         },
     );
   }
+
 }
