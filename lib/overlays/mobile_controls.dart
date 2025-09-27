@@ -21,8 +21,8 @@ class MobileControls extends StatelessWidget {
               onTapCancel: () => game.player.horizontalDirection = 0,
               child: Image.asset(
                 'assets/images/left.png',
-                width: 64,
-                height: 64,
+                width: 32,
+                height: 32,
               ),
             ),
 
@@ -35,8 +35,8 @@ class MobileControls extends StatelessWidget {
               onTapCancel: () => game.player.hasJumped = false,
               child: Image.asset(
                 'assets/images/up.png',
-                width: 64,
-                height: 64,
+                width: 32,
+                height: 32,
               ),
             ),
 
@@ -47,8 +47,8 @@ class MobileControls extends StatelessWidget {
               onTapCancel: () => game.player.horizontalDirection = 0,
               child: Image.asset(
                 'assets/images/right.png',
-                width: 64,
-                height: 64,
+                width: 32,
+                height: 32,
               ),
             ),
           ],
