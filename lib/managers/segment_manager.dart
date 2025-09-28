@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import '../actors/water_enemy.dart';
 import '../objects/ground_block.dart';
 import '../objects/platform_block.dart';
+import '../objects/power_up.dart';
 import '../objects/star.dart';
 
 class Block {
@@ -33,6 +34,7 @@ final segment0 = [
   Block(Vector2(5, 3), PlatformBlock),
   Block(Vector2(6, 0), GroundBlock),
   Block(Vector2(6, 3), PlatformBlock),
+  Block(Vector2(6, 4), PowerUp),
   Block(Vector2(7, 0), GroundBlock),
   Block(Vector2(7, 3), PlatformBlock),
   Block(Vector2(8, 0), GroundBlock),

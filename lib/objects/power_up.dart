@@ -5,22 +5,22 @@ import 'package:flutter/material.dart';
 
 import '../ember_quest.dart';
 
-class Star extends SpriteComponent
+class PowerUp extends SpriteComponent
     with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
   final Vector2 velocity = Vector2.zero();
 
-  Star({
+  PowerUp({
     required this.gridPosition,
     required this.xOffset,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
-    final starImage = game.images.fromCache('star.png');
-    sprite = Sprite(starImage);
+    final powerUpImage = game.images.fromCache('power_up.png');
+    sprite = Sprite(powerUpImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset + (size.x / 2),
       game.size.y - (gridPosition.y * size.y) - (size.y / 2),

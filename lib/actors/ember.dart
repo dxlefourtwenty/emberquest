@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -10,6 +8,9 @@ import '../objects/ground_block.dart';
 import '../objects/platform_block.dart';
 import '../objects/star.dart';
 import 'water_enemy.dart';
+import '../objects/power_up.dart';
+import 'package:flutter/foundation.dart';
+
 
 class EmberPlayer extends SpriteAnimationComponent
     with KeyboardHandler, CollisionCallbacks, HasGameReference<EmberQuestGame> {
@@ -25,13 +26,18 @@ class EmberPlayer extends SpriteAnimationComponent
   final double terminalVelocity = 150;
   int horizontalDirection = 0;
 
-  final bool isMobile = Platform.isAndroid || Platform.isIOS;
-
   bool hasJumped = false;
   bool isOnGround = false;
   bool hitByEnemy = false;
-  // add bool here for isInvincible
-  // add bool here for hitByPowerUp
+  bool isInvincible = false;
+  bool get isMobile {
+    if (kIsWeb) {
+      // If on web, treat mobile browser as desktop controls for now
+      return false;
+    }
+    return defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS;
+  }
 
   @override
   Future<void> onLoad() async {
@@ -152,8 +158,18 @@ class EmberPlayer extends SpriteAnimationComponent
       game.starsCollected++;
     }
 
-    if (other is WaterEnemy) {
-      hit();
+    if (other is PowerUp) {
+      other.removeFromParent();
+      activatePowerUp();
+    }
+
+    if (other is WaterEnemy ) {
+      if (isInvincible) {
+        other.removeFromParent();
+        game.starsCollected++;
+      } else {
+        hit();
+      }
     }
     super.onCollision(intersectionPoints, other);
   }
@@ -176,6 +192,40 @@ class EmberPlayer extends SpriteAnimationComponent
         ..onComplete = () {
           hitByEnemy = false;
         },
+    );
+  }
+
+  // Method activates invincibility for ember for 15 seconds
+  void activatePowerUp() {
+    if (isInvincible) return;
+
+    isInvincible = true;
+    
+    // Swap to invincible animation
+    final normalAnim = animation;
+    animation = SpriteAnimation.fromFrameData(
+      game.images.fromCache('ember_invincible.png'),
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        textureSize: Vector2.all(16),
+        stepTime: 0.12,
+      ),
+    );
+
+    // Add blinking effect to show invincibility
+    add(
+      OpacityEffect.fadeOut(
+        EffectController(
+          alternate: true,
+          duration: 0.2,
+          repeatCount: 75,
+        ),
+      )
+          ..onComplete = () {
+            // Restore normal state
+            isInvincible = false;
+            animation = normalAnim;
+          },
     );
   }
 

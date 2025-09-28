@@ -10,6 +10,7 @@ import 'objects/ground_block.dart';
 import 'objects/platform_block.dart';
 import 'objects/star.dart';
 import 'overlays/hud.dart';
+import 'objects/power_up.dart';
 
 class EmberQuestGame extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents {
@@ -37,6 +38,8 @@ class EmberQuestGame extends FlameGame
       'heart.png',
       'star.png',
       'water_enemy.png',
+      'power_up.png',
+      'ember_invincible.png'
     ]);
     camera.viewfinder.anchor = Anchor.topLeft;
 
@@ -72,6 +75,10 @@ class EmberQuestGame extends FlameGame
           xOffset: xPositionOffset,
         ),
         const (WaterEnemy) => WaterEnemy(
+          gridPosition: block.gridPosition,
+          xOffset: xPositionOffset,
+        ),
+        const (PowerUp) => PowerUp(
           gridPosition: block.gridPosition,
           xOffset: xPositionOffset,
         ),
